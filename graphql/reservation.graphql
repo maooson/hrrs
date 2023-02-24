@@ -1,0 +1,57 @@
+query UserReservations {
+  userReservations(userId: "USER_ID") {
+    ...ReservationData
+  }
+}
+
+query PublishedReservationsConnection {
+  allReservations(first: 20, filterBy: COMPLETED) {
+    totalCount
+    edges {
+      cursor
+      node {
+        ...ReservationData
+        guest {
+          ...UserData
+        }
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+mutation CreateReservation {
+  createReservation(
+    data: { tableSize: "SMALL", expectedArrivalTime: "2022-03-02T09:30:00.000Z", status: "PENDING" }
+  ) {
+    ...ReservationData
+  }
+}
+
+subscription SubscriptionReservation {
+  ReservationCreated {
+    ...ReservationData
+  }
+}
+
+fragment ReservationData on Reservation {
+  id
+  createdAt
+  updatedAt
+  tableSize
+  expectedArrivalTime
+  status
+}
+
+fragment UserData on User {
+  id
+  email
+  firstname
+  lastname
+  role
+}

@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  hrrs-api:
+    container_name: hrrs-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - hrrs-mongo
+    env_file:
+      - .env
+
+  hrrs-mongo:
+    image: mongo:latest
+    container_name: hrrs-mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    env_file:
+      - .env
+    volumes:
+      - mongo:/data/db
+
+volumes:
+  mongo:
+    name: mongo-db

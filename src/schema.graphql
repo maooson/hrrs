@@ -1,0 +1,136 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Auth {
+  """JWT access token"""
+  accessToken: JWT!
+
+  """JWT refresh token"""
+  refreshToken: JWT!
+  user: User!
+}
+
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
+}
+
+input ChangeStatusInput {
+  status: String!
+}
+
+input CreateReservationInput {
+  expectedArrivalTime: DateTime!
+  status: String!
+  tableSize: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
+"""
+scalar JWT
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  changePassword(data: ChangePasswordInput!): User!
+  createReservation(data: CreateReservationInput!): Reservation!
+  login(data: LoginInput!): Auth!
+  refreshToken(token: JWT!): Token!
+  signup(data: SignupInput!): Auth!
+  updateReservation(data: ChangeStatusInput!, reservationId: String!): Reservation!
+  updateUser(data: UpdateUserInput!): User!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type Query {
+  allReservations(after: String, before: String, filterBy: String, first: Int, last: Int, skip: Int): ReservationConnection!
+  hello(name: String!): String!
+  helloWorld: String!
+  me: User!
+  reservation(reservationId: String!): Reservation!
+  userReservations(filterBy: String, userId: String!): [Reservation!]!
+}
+
+type Reservation {
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  expectedArrivalTime: DateTime!
+  guest: User!
+  id: ID!
+  status: String!
+  tableSize: String!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+}
+
+type ReservationConnection {
+  edges: [ReservationEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ReservationEdge {
+  cursor: String!
+  node: Reservation!
+}
+
+"""User role"""
+enum Role {
+  ADMIN
+  USER
+}
+
+input SignupInput {
+  email: String!
+  firstname: String
+  lastname: String
+  password: String!
+}
+
+type Subscription {
+  reservationCreated: Reservation!
+}
+
+type Token {
+  """JWT access token"""
+  accessToken: JWT!
+
+  """JWT refresh token"""
+  refreshToken: JWT!
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+}
+
+type User {
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  email: String!
+  firstname: String
+  id: ID!
+  lastname: String
+  reservations: [Reservation!]
+  role: Role!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+}

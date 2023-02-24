@@ -1,0 +1,45 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  email String [unique, not null]
+  password String [not null]
+  firstname String
+  lastname String
+  role Role [not null, default: 'USER']
+  reservations Reservation [not null]
+}
+
+Table Reservation {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  guest User
+  guestId String [not null]
+  tableSize String [not null, default: 'SMALL']
+  expectedArrivalTime DateTime [not null]
+  status String [not null, default: 'PENDING']
+}
+
+Enum TableSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+Enum Status {
+  PENDING
+  COMPLETED
+  CANCELED
+}
+
+Enum Role {
+  ADMIN
+  USER
+}
+
+Ref: Reservation.guestId > User.id
